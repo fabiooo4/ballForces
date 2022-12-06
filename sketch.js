@@ -1,15 +1,15 @@
 class Ball {
-  constructor(pos, size) {
+  constructor(pos, mass) {
     this.pos = pos;
     this.vel = createVector(0,0);
     this.acc = createVector(0,0);
-    this.size = size;
+    this.mass = mass;
   }
 
   draw() {
     fill(255);
     stroke(255);
-    ellipse(this.pos.x, this.pos.y, this.size);
+    ellipse(this.pos.x, this.pos.y, this.mass);
   }
 
   update() {
@@ -25,18 +25,20 @@ class Ball {
   }
 
   applyForce(force) {
-    this.acc = force;
+    this.acc.add(force);
   }
 
   bounce() {
     // Check lateral borders
-    if (this.pos.x > width - this.size || this.pos.x < 0 + this.size) {
+    if (this.pos.x > width - this.mass/2 || this.pos.x < 0 + this.mass/2) {
       this.vel.x *= -1;
+      this.pos.x = width - this.mass/2;
     }
 
     // Check vertical borders
-    if (this.pos.y > height - this.size || this.pos.y < 0 + this.size) {
+    if (this.pos.y > height - this.mass/2 || this.pos.y < 0 + this.mass/2) {
       this.vel.y *= -1;
+      this.pos.y = height - this.mass/2;
     }
   }
 } 
@@ -56,7 +58,7 @@ function setup() {
 function draw() {
   background(0, 10);
 
-  let gravity = createVector(0, 0.5);
+  let gravity = createVector(0, 1);
   let wind = createVector(0.3, 0);
 
   // Draw ball and apply movement
